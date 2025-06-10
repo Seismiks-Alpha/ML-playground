@@ -9,7 +9,7 @@ Model Deteksi & Segmentasi (YOLO): Untuk mengidentifikasi jenis makanan dan area
 Model Estimasi Nutrisi (SVR): Untuk memprediksi kandungan nutrisi berdasarkan jenis dan estimasi berat makanan.
 Tujuan akhirnya adalah mengubah sebuah gambar makanan menjadi output data nutrisi (karbohidrat, protein, lemak, dan kalori).
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------------------------------------------------------------------------------------------
 
 2. File Aset yang Diperlukan
 Untuk menjalankan sistem ini secara penuh, pastikan semua file aset berikut tersedia dan berada di path yang benar:
@@ -25,7 +25,7 @@ Untuk menjalankan sistem ini secara penuh, pastikan semua file aset berikut ters
 - Data Pendukung:
     pixel_dataset.csv (berisi faktor konversi piksel ke gram)
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------------------------------------------------------------------------------------------
 
 3. Alur Kerja Estimasi (Dari Gambar ke Nutrisi)
 Berikut adalah alur kerja langkah demi langkah tentang bagaimana sistem memproses input gambar untuk
@@ -69,7 +69,7 @@ Output: Rincian estimasi nutrisi untuk setiap makanan yang terdeteksi di gambar.
     Jika ada beberapa jenis makanan yang terdeteksi di gambar, proses ini akan diulang untuk setiap jenis.
     Sistem dapat menampilkan rincian nutrisi per makanan dan juga total nutrisi keseluruhan dari piring tersebut
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------------------------------------------------------------------------------------------
 
 4. Dependensi Library Python
 Untuk menjalankan skrip inferensi (model-run-complete.ipynb atau sejenisnya), pastikan environment Python memiliki library berikut terinstal:
