@@ -21,7 +21,7 @@ print("\n--- Memuat semua model dan data aset... ---")
 # --- Muat Model YOLO ---
 try:
     # Path disesuaikan untuk membaca dari folder yang sama
-    yolo_model = YOLO("model_26-05_1.pt") 
+    yolo_model = YOLO("model_yolov11-seg.pt") 
     print("Model YOLO berhasil dimuat.")
 except Exception as e:
     print(f"Error memuat model YOLO: {e}")
