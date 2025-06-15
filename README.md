@@ -17,6 +17,9 @@ Untuk menjalankan sistem ini secara penuh, pastikan semua file aset berikut ters
 - Model Deteksi (YOLO):
     model_yolov11-seg.pt
 
+- Model Klasifikasi Volume (CNN):
+    volume_classifier_finetuned_model.h5
+
 - Model Estimasi Nutrisi (SVR) & Komponennya:
     svr_multi_output_model.pkl
     svr_scaler.pkl
@@ -28,46 +31,20 @@ Untuk menjalankan sistem ini secara penuh, pastikan semua file aset berikut ters
 ---------------------------------------------------------------------------------------------------------------------------------
 
 3. Alur Kerja Estimasi (Dari Gambar ke Nutrisi)
-Berikut adalah alur kerja langkah demi langkah tentang bagaimana sistem memproses input gambar untuk
-menghasilkan output nutrisi. Referensi alur kerja ini dapat dilihat di file model-run-complete.ipynb.
+Input: Sebuah file gambar makanan.
+Output: Rincian estimasi nutrisi untuk setiap makanan yang terdeteksi.
 
-Input: Sebuah file gambar makanan (misalnya, dalam format .jpg atau .png).
-Output: Rincian estimasi nutrisi untuk setiap makanan yang terdeteksi di gambar.
+Langkah-langkah Proses:
 
---- Langkah-langkah Proses ---
+Pra-pemrosesan Gambar: Gambar input diubah ukurannya menjadi 640x640 piksel.
 
-> Preprocessing Gambar:
+Deteksi & Segmentasi (YOLO): Model YOLO mendeteksi food_type, pixel_count (luas area), dan bounding_box untuk setiap objek.
 
-    Aplikasi menerima gambar makanan sebagai input.
-    Untuk hasil terbaik, disarankan agar gambar diambil dari atas (top-down view) dengan jarak yang relatif konsisten (~30cm).
-    Gambar input kemudian diubah ukurannya (resize) menjadi 640x640 piksel.
+Klasifikasi Volume (CNN - Khusus Nasi Putih): Jika objek yang terdeteksi adalah 'Nasi Putih', gambar potongan (crop) berdasarkan bounding_box akan dianalisis oleh Model CNN untuk menentukan volumenya ('merata' atau 'padat').
 
-> Tahap 1: Deteksi & Estimasi Berat (Menggunakan YOLO)
+Estimasi Berat: Berat diestimasi dengan mengalikan pixel_count dengan faktor gram_per_pixel dari pixel_dataset.csv. Untuk Nasi Putih, faktor yang digunakan disesuaikan berdasarkan hasil klasifikasi CNN.
 
-    Gambar 640x640 dimasukkan ke Model YOLO (model_yolov11-seg.pt).
-    Model akan melakukan instance segmentation untuk menghasilkan dua informasi utama untuk setiap objek makanan yang terdeteksi:
-    Jenis Makanan (food_type): Contoh: 'Nasi Putih', 'Ayam Goreng - Dada'.
-    Jumlah Piksel (pixel_count): Luas area objek dalam piksel dari masker segmentasi.
-    Untuk setiap makanan yang terdeteksi, estimasi berat (gram) dihitung dengan mengalikan pixel_count dengan
-    faktor gram_per_pixel yang sesuai dari file pixel_dataset.csv.
-
-> Tahap 2: Estimasi Nutrisi (Menggunakan SVR)
-
-    Hasil dari Tahap 1, yaitu food_type dan estimasi_berat, digunakan sebagai input untuk tahap ini.
-    Preprocessing Input SVR: Sebelum dimasukkan ke model SVR, input ini diproses menggunakan:
-    svr_feature_names.pkl: Untuk memastikan struktur fitur (setelah one-hot encoding) konsisten.
-    svr_scaler.pkl: Untuk melakukan scaling pada data input.
-    
-    Prediksi Nutrisi: Data yang telah diproses kemudian dimasukkan ke Model SVR (svr_multi_output_model.pkl).
-    Model SVR akan mengeluarkan estimasi nutrisi lengkap untuk makanan tersebut:
-    Karbohidrat (g)
-    Protein (g)
-    Lemak (g)
-    Kalori (kkal)
-    Agregasi Hasil:
-
-    Jika ada beberapa jenis makanan yang terdeteksi di gambar, proses ini akan diulang untuk setiap jenis.
-    Sistem dapat menampilkan rincian nutrisi per makanan dan juga total nutrisi keseluruhan dari piring tersebut
+Estimasi Nutrisi (SVR): Estimasi berat dan nama makanan dasar (misalnya, 'Nasi Putih', tanpa label 'merata'/'padat') digunakan sebagai input untuk Model SVR untuk memprediksi nutrisi lengkap.
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
