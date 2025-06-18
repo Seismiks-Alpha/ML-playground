@@ -173,8 +173,12 @@ def get_full_food_analysis(image_path):
 
 # --- Contoh Penggunaan Fungsi Utama ---
 if __name__ == "__main__":
-    # Path ini sekarang hanya nama file karena diasumsikan berada di folder yang sama
     test_image_path = "run-tests/ayam-110gr_nasi-110gr_1.jpg" 
-    
-    # Jalankan seluruh pipeline
     final_analysis = get_full_food_analysis(test_image_path)
+
+    if final_analysis:
+        print("\n--- Ringkasan Analisis (Format JSON-like) ---")
+        import json
+        print(json.dumps(final_analysis, indent=4))
+    else:
+        print("\nAnalisis tidak dapat diselesaikan atau tidak ada objek terdeteksi.")
